@@ -19,7 +19,7 @@ function note_find -a pattern -d "find note by note name"
     find $FD_NOTES_HOME/ -iname "*$pattern*"
 end
 
-function note_search -a pattern -d "find note by full text search"
+function _note_search -a pattern -d "find note by full text search"
     ag -lc --markdown "$pattern" $FD_NOTES_HOME | sort -t: -nrk2 | cut -d':' -f1
 end
 
@@ -41,8 +41,8 @@ function _escape_file_name -a title -d "remove non-path characters"
   echo (string replace ' ' '_')  
 end
 
-function display_edit_options -a search_pattern
-  set matches (note_search "$search_pattern")
+function note_search -a search_pattern
+  set matches (_note_search "$search_pattern")
   set -g dcmd "dialog --stdout --menu 'select the file to edit' 20 60 20 " 
   set c 1
   for option in $matches
