@@ -65,6 +65,10 @@ end
 
 function note_find -a search_pattern -d "file name search for <pattern>, opens selection in default editor"
   set matches (_note_find "$search_pattern")
+  if test 1 -eq (count $matches)
+    note_edit $matches[1]
+    return
+  end
   set -g dcmd "dialog --stdout --no-tags --menu 'select the file to edit' 20 60 20 " 
   set c 1
   for option in $matches
@@ -81,6 +85,10 @@ end
 
 function note_search -a search_pattern -d "full text search for <pattern>, opens selection in default editor"
   set matches (_note_search "$search_pattern")
+  if test 1 -eq (count $matches)
+    note_edit $matches[1]
+    return
+  end
   set -g dcmd "dialog --stdout --no-tags --menu 'select the file to edit' 20 60 20 " 
   set c 1
   for option in $matches
