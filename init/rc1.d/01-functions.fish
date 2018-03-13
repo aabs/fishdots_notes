@@ -15,7 +15,7 @@ function note_create_project_note -d "create a new text note within a project ar
   
 end
 
-function note_find -a pattern -d "find note by note name"
+function _note_find -a pattern -d "find note by note name"
     find $FD_NOTES_HOME/ -iname "*$pattern*"
 end
 
@@ -41,9 +41,9 @@ function _escape_file_name -a title -d "remove non-path characters"
   echo (string replace ' ' '_')  
 end
 
-function note_search -a search_pattern
-  set matches (_note_search "$search_pattern")
-  set -g dcmd "dialog --stdout --menu 'select the file to edit' 20 60 20 " 
+function note_find -a search_pattern
+  set matches (_note_find "$search_pattern")
+  set -g dcmd "dialog --stdout --no-tags --menu 'select the file to edit' 20 60 20 " 
   set c 1
   for option in $matches
     set l (get_file_relative_path $option)
@@ -57,9 +57,20 @@ function note_search -a search_pattern
   end
 end
 
-function pick_note
-  set x (dialog "$FD_NOTES_HOME" 20 20)
-  vim $x
+function note_search -a search_pattern
+  set matches (_note_search "$search_pattern")
+  set -g dcmd "dialog --stdout --no-tags --menu 'select the file to edit' 20 60 20 " 
+  set c 1
+  for option in $matches
+    set l (get_file_relative_path $option)
+    set -g dcmd "$dcmd $c '$l'"
+    set c (math $c + 1)
+  end
+  set choice (eval "$dcmd")
+  clear
+  if test $status -eq 0
+    note_edit $matches[$choice]
+  end
 end
 
 function get_file_relative_path -a path_to_note -d "description"
