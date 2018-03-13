@@ -10,20 +10,16 @@ function note_create -a title -d "create a new text note"
   set escaped_file_name (_escape_string $title)
   set d (date --iso-8601)
   set p "$FD_NOTES_HOME/$d-$escaped_file_name.md"
-  touch $p
   note_edit $p
+  echo wrote "$p" to notes
 end
 
 function note_create_project_note  -a title -d "create a new text note within a project area"
-  if not set -q $CURRENT_PROJECT_SN
-    note_create $title
-    return
-  end
   set escaped_file_name (_escape_string $title)
   set d (date --iso-8601)
   set p "$FD_NOTES_HOME/$CURRENT_PROJECT_SN/$d-$escaped_file_name.md"
-  touch $p
   note_edit $p
+  echo wrote "$p" to notes
 end
 
 function _note_search -a pattern -d "find note by full text search"
