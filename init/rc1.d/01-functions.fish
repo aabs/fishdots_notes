@@ -1,26 +1,18 @@
-
-# find notes
-# edit note
-# create new note
-# create note within project
-# delete note
-# rename note
 function note
   switch $argv[1]
     case edit
-      note_edit $argv[2..]
+      note_edit $argv[2]
     case find
-      note_find $argv[2..]
+      note_find $argv[2]
     case search
-      note_search $argv[2..]
+      note_search $argv[2]
     case create
-      note_create $argv[2..]
+      note_create $argv[2]
     case save
-      note_save $argv[2..]
-    case backup
-      note_backup $argv[2..]
+      note_save
+    case sync
+      note_sync
     case move
-      _validate_args 2 $argv
       note_move $argv[2..3]
     case projnote
       note_create_project_note $argv[2..]
