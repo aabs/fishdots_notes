@@ -1,0 +1,1 @@
+abbr --add fdn note home

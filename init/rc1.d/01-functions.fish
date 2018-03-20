@@ -1,5 +1,7 @@
 function note
   switch $argv[1]
+    case home
+      cd $FD_NOTES_HOME
     case edit
       note_edit $argv[2]
     case find
@@ -58,6 +60,9 @@ function note_help -d "display usage info"
   echo ""
   echo "note sync"
   echo "  synchronise notes with origin git repo"
+  echo ""
+  echo "note home"
+  echo "  cd to the notes directory"
   echo ""
   echo "note help"
   echo "  EXPL"
