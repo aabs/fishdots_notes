@@ -68,6 +68,10 @@ function note_help -d "display usage info"
   echo "  EXPL"
 end
 
+function note_tasks -d "find all tasks"
+  ag --markdown -Q -- '- [ ]' $FD_NOTES_HOME 
+end
+
 function note_create -a title -d "create a new text note"
   set escaped_file_name (_escape_string $title)
   set d (date --iso-8601)
