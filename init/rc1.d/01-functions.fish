@@ -1,7 +1,13 @@
 function note
+  if test 0 -eq (count $argv)
+    note_help
+    return
+  end
   switch $argv[1]
     case home
       cd $FD_NOTES_HOME
+    case tasks
+      note_tasks
     case edit
       note_edit $argv[2]
     case find
@@ -10,14 +16,14 @@ function note
       note_search $argv[2]
     case create
       note_create $argv[2]
+    case pcreate
+      note_create_project_note $argv[2]
     case save
       note_save
     case sync
       note_sync
     case move
       note_move $argv[2..3]
-    case projnote
-      note_create_project_note $argv[2..]
     case '*'
       note_help
   end
@@ -51,6 +57,9 @@ function note_help -d "display usage info"
   echo ""
   echo "note create title"
   echo "  create a new note"
+  echo ""
+  echo "note pcreate title"
+  echo "  create a new note within a project area"
   echo ""
   echo "note save"
   echo "  save any new or modified notes locally"
