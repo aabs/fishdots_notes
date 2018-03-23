@@ -6,6 +6,8 @@ function note
   switch $argv[1]
     case home
       cd $FD_NOTES_HOME
+    case ls
+      _note_find '*.md'
     case tasks
       note_tasks
     case edit
