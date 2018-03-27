@@ -206,6 +206,7 @@ function note_sync -d "save all notes to origin repo"
   note_save
   _enter_notes_home
   git fetch --all -t
+  git pull origin (git branch-name)
   git push origin (git branch-name)
   _leave_notes_home
 end
