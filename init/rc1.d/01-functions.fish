@@ -7,7 +7,7 @@ function note
     case home
       cd $FD_NOTES_HOME
     case ls
-      _note_find '*.md'
+      _note_find '*.org'
     case tasks
       note_tasks
     case edit
@@ -80,13 +80,14 @@ function note_help -d "display usage info"
 end
 
 function note_tasks -d "find all tasks"
-  ag --markdown -Q -- '- [ ]' $FD_NOTES_HOME 
+# NB this will be deprecated in favour of org agenda mode...
+  ag --org -Q -- '- [ ]' $FD_NOTES_HOME 
 end
 
 function note_create -a title -d "create a new text note"
   set escaped_file_name (_escape_string $title)
   set d (date --iso-8601)
-  set p "$FD_NOTES_HOME/$d-$escaped_file_name.md"
+  set p "$FD_NOTES_HOME/$d-$escaped_file_name.org"
   note_edit $p
   echo wrote "$p" to notes
 end
@@ -94,13 +95,13 @@ end
 function note_create_project_note  -a title -d "create a new text note within a project area"
   set escaped_file_name (_escape_string $title)
   set d (date --iso-8601)
-  set p "$FD_NOTES_HOME/$CURRENT_PROJECT_SN/$d-$escaped_file_name.md"
+  set p "$FD_NOTES_HOME/$CURRENT_PROJECT_SN/$d-$escaped_file_name.org"
   note_edit $p
   echo wrote "$p" to notes
 end
 
 function _note_search -a pattern -d "find note by full text search"
-    ag -lc --markdown "$pattern" $FD_NOTES_HOME | sort -t: -nrk2 | cut -d':' -f1
+    ag -lc --org "$pattern" $FD_NOTES_HOME | sort -t: -nrk2 | cut -d':' -f1
 end
 
 function note_move -a from_basename to_basename -d "change the name of a note"
@@ -117,13 +118,13 @@ function note_move -a from_basename to_basename -d "change the name of a note"
   end
 end
 
-function note_edit -a file_path -d "open the file in vim"
+function note_edit -a file_path -d "open the file in emacs"
   if test $file_path = '-'
     read -l x
     echo "editing $x"
-    vim $x
+    emacs $x
   else
-    vim $file_path
+    emacs $file_path
   end
 end
 
