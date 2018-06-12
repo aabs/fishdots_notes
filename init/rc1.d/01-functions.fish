@@ -118,13 +118,13 @@ function note_move -a from_basename to_basename -d "change the name of a note"
   end
 end
 
-function note_edit -a file_path -d "open the file in emacs"
+function note_edit -a file_path -d "open the file in nvim"
   if test $file_path = '-'
     read -l x
     echo "editing $x"
-    emacs $x
+    nvim $x
   else
-    emacs $file_path
+    nvim $file_path
   end
 end
 
