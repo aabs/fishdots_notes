@@ -195,27 +195,6 @@ function _note_find -a pattern -d "find note by note name"
     find $FD_NOTES_HOME/ -iname "*$pattern*"
 end
 
-function note_save -d "save all new or modified notes locally"
-  _enter_notes_home
-  git add -A .
-  git commit -m "notes updates and additions"
-  _leave_notes_home
-end
-
 function note_sync -d "save all notes to origin repo"
-  note_save
-  _enter_notes_home
-  git fetch --all -t
-  git pull origin (git branch-name)
-  git push origin (git branch-name)
-  _leave_notes_home
-end
-
-function _enter_notes_home
-  pushd .
-  cd $FD_NOTES_HOME  
-end
-
-function _leave_notes_home
-  popd
+  fishdots_git_sync $FD_NOTES_HOME "notes updates and additions"
 end
