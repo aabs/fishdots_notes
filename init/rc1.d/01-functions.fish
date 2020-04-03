@@ -100,7 +100,7 @@ function note_create_project_note  -a title -d "create a new text note within a 
 end
 
 function _note_search -a pattern -d "find note by full text search"
-    ag -lc --markdown "$pattern" $FD_NOTES_HOME | sort -t: -nrk2 | cut -d':' -f1
+  fishdots_search $FD_NOTES_HOME $pattern
 end
 
 function note_move -a from_basename to_basename -d "change the name of a note"
@@ -147,43 +147,13 @@ function _escape_string -a title -d "remove non-path characters"
 end
 
 function note_find -a search_pattern -d "file name search for <pattern>, opens selection in default editor"
-  set matches (_note_find "$search_pattern")
-  if test 1 -eq (count $matches)
-    note_edit $matches[1]
-    return
-  end
-  set -g dcmd "dialog --stdout --no-tags --menu 'select the file to edit' 20 60 20 " 
-  set c 1
-  for option in $matches
-    set l (get_file_relative_path $option)
-    set -g dcmd "$dcmd $c '$l'"
-    set c (math $c + 1)
-  end
-  set choice (eval "$dcmd")
-  clear
-  if test $status -eq 0
-    note_edit $matches[$choice]
-  end
+  fishdots_find_select $FD_NOTES_HOME $search_pattern
+  note_edit $fd_selected_file
 end
 
 function note_search -a search_pattern -d "full text search for <pattern>, opens selection in default editor"
-  set matches (_note_search "$search_pattern")
-  if test 1 -eq (count $matches)
-    note_edit $matches[1]
-    return
-  end
-  set -g dcmd "dialog --stdout --no-tags --menu 'select the file to edit' 20 60 20 " 
-  set c 1
-  for option in $matches
-    set l (get_file_relative_path $option)
-    set -g dcmd "$dcmd $c '$l'"
-    set c (math $c + 1)
-  end
-  set choice (eval "$dcmd")
-  clear
-  if test $status -eq 0
-    note_edit $matches[$choice]
-  end
+  fishdots_search_select $FD_NOTES_HOME $search_pattern
+  note_edit $fd_selected_file
 end
 
 function get_file_relative_path -a path_to_note -d "description"
@@ -192,7 +162,7 @@ function get_file_relative_path -a path_to_note -d "description"
 end
 
 function _note_find -a pattern -d "find note by note name"
-    find $FD_NOTES_HOME/ -iname "*$pattern*"
+    fishdots_find $FD_NOTES_HOME $pattern
 end
 
 function note_sync -d "save all notes to origin repo"
