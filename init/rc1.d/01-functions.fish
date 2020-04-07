@@ -4,9 +4,9 @@ define_subcommand note home on_note_home "go to the root of the notes collection
 define_subcommand note info on_note_info "display config details of note plugin"
 define_subcommand_nonevented note ls note_ls "list all notes (maybe long)"
 define_subcommand note tasks on_note_tasks ""
-define_subcommand_nonevented note edit on_note_edit "edit the note identified by the path"
-define_subcommand_nonevented note find on_note_find "find the note by searching file names"
-define_subcommand_nonevented note search on_note_search "perform a full text search for patterns"
+define_subcommand_nonevented note edit note_edit "edit the note identified by the path"
+define_subcommand_nonevented note find note_find "find the note by searching file names"
+define_subcommand_nonevented note search note_search "perform a full text search for patterns"
 define_subcommand note create on_note_create "create a new note"
 define_subcommand note pcreate on_note_pcreate "create a new note within a project area"
 define_subcommand note save on_note_save "save any new or modified notes locally (to git)"
@@ -47,6 +47,11 @@ end
 
 function _note_search -a pattern -d "find note by full text search"
   fishdots_search $FD_NOTES_HOME $pattern
+
+end
+
+function note_home -e on_note_home
+  cd $FD_NOTES_HOME
 end
 
 function note_move -e on_note_move -a from_basename to_basename -d "change the name of a note"
@@ -63,7 +68,7 @@ function note_move -e on_note_move -a from_basename to_basename -d "change the n
   end
 end
 
-function note_edit -e on_note_edit -a file_path -d "open the file in nvim"
+function note_edit -a file_path -d "open the file in nvim"
   if test $file_path = '-'
     read -l x
     echo "editing $x"
@@ -92,16 +97,16 @@ function _escape_string -a title -d "remove non-path characters"
   echo $r
 end
 
-function note_ls -e on_note_ls -d "just list every markdown based note"
+function note_ls -d "just list every markdown based note"
   _note_find '*.md'
 end
 
-function note_find -e on_note_find -a search_pattern -d "file name search for <pattern>, opens selection in default editor"
+function note_find -a search_pattern -d "file name search for <pattern>, opens selection in default editor"
   fishdots_find_select $FD_NOTES_HOME $search_pattern
   note_edit $fd_selected_file
 end
 
-function note_search -e on_note_search -a search_pattern -d "full text search for <pattern>, opens selection in default editor"
+function note_search -a search_pattern -d "full text search for <pattern>, opens selection in default editor"
   fishdots_search_select $FD_NOTES_HOME $search_pattern
   note_edit $fd_selected_file
 end
