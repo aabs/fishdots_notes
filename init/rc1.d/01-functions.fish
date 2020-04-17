@@ -68,13 +68,11 @@ function note_move -e on_note_move -a from_basename to_basename -d "change the n
   end
 end
 
-function note_edit -a file_path -d "open the file in nvim"
-  if test $file_path = '-'
-    read -l x
-    echo "editing $x"
-    nvim $x
+function note_edit -a file_path -d "open the file in your preferred editor, or vim by default"
+  if set -q EDITOR
+    eval "$EDITOR '$file_path'"
   else
-    nvim $file_path
+    vim "$file_path"
   end
 end
 
