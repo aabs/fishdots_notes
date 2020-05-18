@@ -46,8 +46,7 @@ function note_create_project_note -e on_note_pcreate  -a title -d "create a new 
 end
 
 function _note_search -a pattern -d "find note by full text search"
-  fishdots_search $FD_NOTES_HOME $pattern
-
+  fishdots_search $FD_NOTES_HOME $pattern 
 end
 
 function note_home -e on_note_home
