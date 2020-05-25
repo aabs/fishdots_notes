@@ -5,4 +5,4 @@ function search_notes_fuzzy -d "ripgrep and fzf"
   eval "$EDITOR $file"
 end
 
-abbr -a nts search_notes_fuzzy
+abbr -a fen search_notes_fuzzy
