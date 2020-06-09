@@ -124,3 +124,4 @@ end
 function note_info -e on_note_info -d "display note plugin config info"
   echo -e "Home Dir:\t\t$FD_NOTES_HOME"
 end
+
