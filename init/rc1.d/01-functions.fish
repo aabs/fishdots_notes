@@ -7,8 +7,8 @@ define_subcommand note tasks on_note_tasks ""
 define_subcommand_nonevented note edit note_edit "edit the note identified by the path"
 define_subcommand_nonevented note find note_find "find the note by searching file names"
 define_subcommand_nonevented note search note_search "perform a full text search for patterns"
-define_subcommand note create on_note_create "create a new note"
-define_subcommand note pcreate on_note_pcreate "create a new note within a project area"
+define_subcommand_nonevented note create note_create "create a new note"
+define_subcommand_nonevented note pcreate note_create_project_note "create a new note within a project area"
 define_subcommand note save on_note_save "save any new or modified notes locally (to git)"
 define_subcommand note sync on_note_sync "save notes and push to origin"
 define_subcommand note move on_note_move "rename or move the note"
@@ -29,7 +29,7 @@ function note_tasks -e on_note_tasks  -d "find all tasks"
   ag --markdown -Q -- '- [ ]' $FD_NOTES_HOME 
 end
 
-function note_create -e on_note_create -a title -d "create a new text note"
+function note_create -a title -d "create a new text note"
   set escaped_file_name (_escape_string $title)
   set d (date --iso-8601)
   set p "$FD_NOTES_HOME/$d-$escaped_file_name.md"
@@ -37,10 +37,12 @@ function note_create -e on_note_create -a title -d "create a new text note"
   echo wrote "$p" to notes
 end
 
-function note_create_project_note -e on_note_pcreate  -a title -d "create a new text note within a project area"
-  set escaped_file_name (_escape_string $title)
+function note_create_project_note -d "create a new text note within a project area"
+  set -l title $argv
+  set -l escaped_file_name (_escape_string "$title")
   set d (date --iso-8601)
-  set p "$FD_NOTES_HOME/$CURRENT_PROJECT_SN/$d-$escaped_file_name.md"
+  set p "$FD_NOTES_DEFAULT_INSERT_POINT/$d-$escaped_file_name.md"
+  touch $p
   note_edit $p
   echo wrote "$p" to notes
 end
@@ -71,12 +73,12 @@ function note_edit -a file_path -d "open the file in your preferred editor, or v
   if set -q EDITOR
     eval "$EDITOR '$file_path'"
   else
-    vim "$file_path"
+    nvim "$file_path"
   end
 end
 
-function _escape_string -a title -d "remove non-path characters"
-  set r $title
+function _escape_string -d "remove non-path characters"
+  set r $argv
   set replacements_performed 1 # set to 1 initially to get into the loops
   while test $replacements_performed > 0
     set replacements_performed 0
